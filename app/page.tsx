@@ -10,7 +10,7 @@ export default function Home() {
       <section className="py-20 md:py-28">
         <div className="container">
           <div className="text-center mb-16">
-            <h1 className="empire-font text-6xl md:text-7xl lg:text-8xl mb-6">
+            <h1 className="empire-font mb-6">
               <span className="large-letter">T</span>INY <span className="large-letter">M</span>ODERN
             </h1>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
