@@ -22,27 +22,41 @@ export default async function Image() {
           alignItems: 'center',
           justifyContent: 'center',
           position: 'relative',
+          background: '#ffffff',
         }}
       >
-        {/* Background Image */}
+        {/* Background Pattern */}
         <div
           style={{
             position: 'absolute',
             inset: 0,
-            backgroundImage: 'url(https://tiny-modern.vercel.app/images/gallery/modern-cabin-pool.jpg)',
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
+            background: 'linear-gradient(to right, #f8f8f8 1px, transparent 1px), linear-gradient(to bottom, #f8f8f8 1px, transparent 1px)',
+            backgroundSize: '20px 20px',
+            opacity: 0.5,
           }}
         />
-        
-        {/* Dark Overlay with gradient */}
+
+        {/* Sketch Image */}
         <div
           style={{
-            position: 'absolute',
-            inset: 0,
-            background: 'linear-gradient(to bottom, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0.6) 100%)',
+            width: '80%',
+            height: '60%',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            marginBottom: '40px',
           }}
-        />
+        >
+          <img
+            src="https://tiny-modern.vercel.app/images/gallery/modern-sketch.jpg"
+            alt="Modern architectural sketch"
+            style={{
+              width: '100%',
+              height: '100%',
+              objectFit: 'contain',
+            }}
+          />
+        </div>
 
         {/* Content */}
         <div
@@ -50,22 +64,18 @@ export default async function Image() {
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
-            justifyContent: 'flex-end',
             textAlign: 'center',
             position: 'relative',
-            padding: '40px',
-            height: '100%',
-            paddingBottom: '60px',
+            padding: '20px',
           }}
         >
           <h1
             style={{
-              fontSize: '80px',
+              fontSize: '64px',
               fontWeight: 'bold',
-              color: 'white',
-              marginBottom: '20px',
+              color: '#000000',
+              marginBottom: '16px',
               letterSpacing: '0.05em',
-              textShadow: '0 2px 10px rgba(0,0,0,0.3)',
               lineHeight: 1.1,
             }}
           >
@@ -73,13 +83,11 @@ export default async function Image() {
           </h1>
           <p
             style={{
-              fontSize: '32px',
-              color: 'white',
+              fontSize: '24px',
+              color: '#666666',
               marginTop: '0',
               letterSpacing: '0.02em',
-              textShadow: '0 2px 8px rgba(0,0,0,0.3)',
-              opacity: 0.9,
-              maxWidth: '800px',
+              maxWidth: '600px',
             }}
           >
             AI-Powered Architectural Visualization
