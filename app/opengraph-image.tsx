@@ -15,16 +15,36 @@ export default async function Image() {
     (
       <div
         style={{
-          background: 'linear-gradient(to bottom right, #000000, #1a1a1a)',
           width: '100%',
           height: '100%',
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
           justifyContent: 'center',
-          padding: '40px',
+          position: 'relative',
         }}
       >
+        {/* Background Image */}
+        <div
+          style={{
+            position: 'absolute',
+            inset: 0,
+            backgroundImage: 'url(https://tiny-modern.vercel.app/images/gallery/glass-house-forest.jpg)',
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+          }}
+        />
+        
+        {/* Dark Overlay */}
+        <div
+          style={{
+            position: 'absolute',
+            inset: 0,
+            background: 'linear-gradient(45deg, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.65) 100%)',
+          }}
+        />
+
+        {/* Content */}
         <div
           style={{
             display: 'flex',
@@ -32,25 +52,32 @@ export default async function Image() {
             alignItems: 'center',
             justifyContent: 'center',
             textAlign: 'center',
+            position: 'relative',
+            padding: '40px',
           }}
         >
           <h1
             style={{
-              fontSize: '60px',
+              fontSize: '80px',
               fontWeight: 'bold',
               color: 'white',
               marginBottom: '20px',
-              letterSpacing: '-0.025em',
+              letterSpacing: '0.05em',
+              textShadow: '0 2px 10px rgba(0,0,0,0.3)',
+              lineHeight: 1.1,
             }}
           >
             TINY MODERN
           </h1>
           <p
             style={{
-              fontSize: '30px',
-              color: '#888888',
+              fontSize: '32px',
+              color: '#ffffff',
               marginTop: '0',
-              letterSpacing: '-0.025em',
+              letterSpacing: '0.02em',
+              textShadow: '0 2px 8px rgba(0,0,0,0.3)',
+              opacity: 0.9,
+              maxWidth: '800px',
             }}
           >
             AI-Powered Architectural Visualization
