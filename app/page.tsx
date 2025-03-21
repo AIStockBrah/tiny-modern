@@ -11,7 +11,7 @@ export default function Home() {
         <div className="container">
           <div className="text-center mb-16">
             <h1 className="empire-font text-6xl md:text-7xl lg:text-8xl mb-6">
-              TINY MODERN
+              <span className="large-letter">T</span>INY <span className="large-letter">M</span>ODERN
             </h1>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
               Generate stunning architectural concepts with our AI-powered platform. From modern minimalist to

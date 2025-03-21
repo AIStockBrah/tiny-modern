@@ -98,3 +98,11 @@ body {
   letter-spacing: 0.05em;
   text-transform: uppercase;
 }
+
+.large-letter {
+  display: inline-block;
+  font-size: 120%;
+  line-height: 0.8;
+  vertical-align: baseline;
+  margin-top: -0.1em;
+}
