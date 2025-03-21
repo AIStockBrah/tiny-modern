@@ -1,7 +1,6 @@
 import { ImageResponse } from 'next/og'
 
 export const runtime = 'edge'
-
 export const alt = 'TINY MODERN - AI Architecture Generator'
 export const contentType = 'image/png'
 export const size = {

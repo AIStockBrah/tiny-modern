@@ -22,14 +22,13 @@ export const metadata = {
     description: 'Transform your architectural ideas into stunning visualizations with our AI-powered platform.',
     url: 'https://tiny-modern.vercel.app',
     siteName: 'TINY MODERN',
-    locale: 'en_US',
     type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
     title: 'TINY MODERN - AI Architecture Generator',
     description: 'Transform your architectural ideas into stunning visualizations with our AI-powered platform.',
-    creator: '@tinymodern'
+    creator: '@tinymodern',
   },
   icons: {
     icon: '/favicon.ico',
