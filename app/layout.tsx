@@ -15,7 +15,31 @@ const empireFont = localFont({
 export const metadata = {
   title: "TINY MODERN - AI-Powered Architectural Visualization",
   description: "Transform your architectural ideas into stunning visualizations with our AI-powered platform.",
-    generator: 'v0.dev'
+  generator: 'v0.dev',
+  metadataBase: new URL('https://tiny-modern.vercel.app'),
+  openGraph: {
+    title: 'TINY MODERN - AI Architecture Generator',
+    description: 'Transform your architectural ideas into stunning visualizations with our AI-powered platform.',
+    url: 'https://tiny-modern.vercel.app',
+    siteName: 'TINY MODERN',
+    locale: 'en_US',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'TINY MODERN - AI Architecture Generator',
+    description: 'Transform your architectural ideas into stunning visualizations with our AI-powered platform.',
+    creator: '@tinymodern'
+  },
+  icons: {
+    icon: '/favicon.ico',
+    shortcut: '/favicon.ico',
+    apple: '/apple-icon.png',
+    other: {
+      rel: 'apple-touch-icon-precomposed',
+      url: '/apple-icon.png',
+    },
+  },
 }
 
 export default function RootLayout({
