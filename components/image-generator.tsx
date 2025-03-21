@@ -22,6 +22,7 @@ export function ImageGenerator() {
     try {
       setIsGenerating(true);
       setError(null);
+      setGeneratedImage(null);
 
       const response = await fetch('/api/generate', {
         method: 'POST',
@@ -39,9 +40,14 @@ export function ImageGenerator() {
         throw new Error(data.error || 'Failed to generate image');
       }
 
+      if (!data.imageUrl) {
+        throw new Error('No image URL received from the server');
+      }
+
       setGeneratedImage(data.imageUrl);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to generate image');
+      console.error('Generation error:', err);
+      setError(err instanceof Error ? err.message : 'An unexpected error occurred');
     } finally {
       setIsGenerating(false);
     }
@@ -116,7 +122,7 @@ export function ImageGenerator() {
         </div>
 
         {error && (
-          <div className="text-red-500 text-sm text-center">
+          <div className="bg-destructive/10 text-destructive text-sm p-4 rounded-lg text-center">
             {error}
           </div>
         )}

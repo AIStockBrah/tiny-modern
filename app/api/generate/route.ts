@@ -13,7 +13,10 @@ export async function POST(request: Request) {
     }
 
     if (!process.env.REPLICATE_API_TOKEN) {
-      throw new Error('REPLICATE_API_TOKEN is not configured');
+      return NextResponse.json(
+        { error: 'API token is not configured' },
+        { status: 500 }
+      );
     }
 
     const response = await fetch("https://api.replicate.com/v1/predictions", {
@@ -40,8 +43,10 @@ export async function POST(request: Request) {
 
     if (!response.ok) {
       const error = await response.json();
-      console.error('Replicate API error:', error);
-      throw new Error(error.detail || 'Failed to generate image');
+      return NextResponse.json(
+        { error: error.detail || 'Failed to generate image' },
+        { status: response.status }
+      );
     }
 
     const prediction = await response.json();
@@ -55,11 +60,25 @@ export async function POST(request: Request) {
     // You could modify the frontend to display multiple images if desired
     const imageUrl = Array.isArray(result.output) ? result.output[0] : result.output;
 
+    if (result.status === "failed") {
+      return NextResponse.json(
+        { error: result.error || "Image generation failed" },
+        { status: 500 }
+      );
+    }
+
+    if (!result.output || (Array.isArray(result.output) && result.output.length === 0)) {
+      return NextResponse.json(
+        { error: "No image was generated" },
+        { status: 500 }
+      );
+    }
+
     return NextResponse.json({ imageUrl });
   } catch (error) {
     console.error('Error:', error);
     return NextResponse.json(
-      { error: error instanceof Error ? error.message : 'Failed to generate image' },
+      { error: error instanceof Error ? error.message : 'An unexpected error occurred' },
       { status: 500 }
     );
   }
