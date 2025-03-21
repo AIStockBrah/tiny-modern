@@ -2,30 +2,58 @@ import { ImageResponse } from 'next/og'
 
 export const runtime = 'edge'
 
-export const size = {
-  width: 32,
-  height: 32,
-}
-
 export const contentType = 'image/png'
+export const size = {
+  width: 180,
+  height: 180,
+}
 
 export default function Icon() {
   return new ImageResponse(
     (
       <div
         style={{
-          fontSize: 24,
-          background: 'black',
           width: '100%',
           height: '100%',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          color: 'white',
-          fontWeight: 700,
+          position: 'relative',
+          overflow: 'hidden',
+          borderRadius: '22%',
+          background: 'white',
         }}
       >
-        TM
+        <img
+          src="/images/icon-sketch.jpg"
+          alt="Modern architectural sketch"
+          style={{
+            position: 'absolute',
+            width: '100%',
+            height: '100%',
+            objectFit: 'cover',
+          }}
+        />
+        <div
+          style={{
+            position: 'absolute',
+            width: '100%',
+            height: '100%',
+            background: 'rgba(0, 0, 0, 0.6)',
+          }}
+        />
+        <div
+          style={{
+            fontSize: '80px',
+            fontWeight: 'bold',
+            color: 'white',
+            letterSpacing: '-0.05em',
+            position: 'relative',
+            zIndex: 2,
+          }}
+        >
+          TM
+        </div>
       </div>
     ),
     {

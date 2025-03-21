@@ -4,6 +4,7 @@ import { ThemeProvider } from "@/components/theme-provider"
 import './globals.css'
 import { Inter } from 'next/font/google'
 import localFont from 'next/font/local'
+import { Metadata } from 'next'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -12,14 +13,14 @@ const empireFont = localFont({
   variable: '--font-empire'
 })
 
-export const metadata = {
-  title: "TINY MODERN - AI-Powered Architectural Visualization",
-  description: "Transform your architectural ideas into stunning visualizations with our AI-powered platform.",
-  generator: 'v0.dev',
+export const metadata: Metadata = {
+  title: 'TINY MODERN - AI-Powered Architectural Visualization',
+  description: 'Transform your architectural ideas into stunning visualizations with AI. Create modern, minimalist architectural designs instantly.',
+  generator: 'Next.js',
   metadataBase: new URL('https://tiny-modern.vercel.app'),
   openGraph: {
-    title: 'TINY MODERN - AI Architecture Generator',
-    description: 'Transform your architectural ideas into stunning visualizations with our AI-powered platform.',
+    title: 'TINY MODERN - AI-Powered Architectural Visualization',
+    description: 'Transform your architectural ideas into stunning visualizations with AI',
     url: 'https://tiny-modern.vercel.app',
     siteName: 'TINY MODERN',
     type: 'website',
@@ -27,17 +28,12 @@ export const metadata = {
   twitter: {
     card: 'summary_large_image',
     title: 'TINY MODERN - AI Architecture Generator',
-    description: 'Transform your architectural ideas into stunning visualizations with our AI-powered platform.',
+    description: 'Transform your architectural ideas into stunning visualizations with AI',
     creator: '@tinymodern',
   },
   icons: {
-    icon: '/favicon.ico',
-    shortcut: '/favicon.ico',
-    apple: '/apple-icon.png',
-    other: {
-      rel: 'apple-touch-icon-precomposed',
-      url: '/apple-icon.png',
-    },
+    icon: '/icon',
+    apple: '/icon',
   },
 }
 
