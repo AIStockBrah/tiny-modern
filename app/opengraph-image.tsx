@@ -29,18 +29,18 @@ export default async function Image() {
           style={{
             position: 'absolute',
             inset: 0,
-            backgroundImage: 'url(https://tiny-modern.vercel.app/images/gallery/glass-house-forest.jpg)',
+            backgroundImage: 'url(https://tiny-modern.vercel.app/images/gallery/modern-cabin-pool.jpg)',
             backgroundSize: 'cover',
             backgroundPosition: 'center',
           }}
         />
         
-        {/* Dark Overlay */}
+        {/* Dark Overlay with gradient */}
         <div
           style={{
             position: 'absolute',
             inset: 0,
-            background: 'linear-gradient(45deg, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.65) 100%)',
+            background: 'linear-gradient(to bottom, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0.6) 100%)',
           }}
         />
 
@@ -50,10 +50,12 @@ export default async function Image() {
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
-            justifyContent: 'center',
+            justifyContent: 'flex-end',
             textAlign: 'center',
             position: 'relative',
             padding: '40px',
+            height: '100%',
+            paddingBottom: '60px',
           }}
         >
           <h1
@@ -72,7 +74,7 @@ export default async function Image() {
           <p
             style={{
               fontSize: '32px',
-              color: '#ffffff',
+              color: 'white',
               marginTop: '0',
               letterSpacing: '0.02em',
               textShadow: '0 2px 8px rgba(0,0,0,0.3)',
