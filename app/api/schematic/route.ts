@@ -4,10 +4,17 @@ export async function POST(req: Request) {
   try {
     const body = await req.json();
     const imageUrl = body?.imageUrl;
+    const viewType = body?.viewType || 'schematic';
 
     if (!imageUrl) {
       return NextResponse.json({ error: "imageUrl is required" }, { status: 400 });
     }
+
+    const viewTypePrompts = {
+      floorplan: "Create a top-down architectural floor plan layout of this modern tiny house in black and white, showing walls, rooms, and entry.",
+      schematic: "Generate a black-and-white architectural schematic elevation showing the front and side view of this modern tiny house, as a technical drawing.",
+      render3d: "Render a 3D isometric cutaway floor plan view of this tiny house, with visible furniture and walls, in a clean architectural style."
+    };
 
     // STEP 1: Use GPT-4o to generate schematic prompt
     const gptResponse = await fetch("https://api.openai.com/v1/chat/completions", {
@@ -23,7 +30,7 @@ export async function POST(req: Request) {
           {
             role: "user",
             content: [
-              { type: "text", text: "Create a top-down architectural floor plan layout of this modern tiny house in black and white, showing walls, rooms, and entry." },
+              { type: "text", text: viewTypePrompts[viewType as keyof typeof viewTypePrompts] },
               { type: "image_url", image_url: { url: imageUrl } }
             ]
           }

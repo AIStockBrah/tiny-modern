@@ -13,6 +13,13 @@ export function ImageGenerator() {
   const [generatedImage, setGeneratedImage] = useState<string | null>(null);
   const [schematicImage, setSchematicImage] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [selectedViewType, setSelectedViewType] = useState<string | null>(null);
+
+  const viewTypes = {
+    floorplan: "Create a top-down architectural floor plan layout of this modern tiny house in black and white, showing walls, rooms, and entry.",
+    schematic: "Generate a black-and-white architectural schematic elevation showing the front and side view of this modern tiny house, as a technical drawing.",
+    render3d: "Render a 3D isometric cutaway floor plan view of this tiny house, with visible furniture and walls, in a clean architectural style."
+  };
 
   const trainedKeywords = [
     'tiny', 'modern', 'cabin', 'farmhouse', 'cyber', 'cottage', 
@@ -20,7 +27,7 @@ export function ImageGenerator() {
     'cliff', 'forest', 'beach'
   ];
 
-  const generateSchematic = async (imageUrl: string) => {
+  const generateSchematic = async (imageUrl: string, viewType: string) => {
     try {
       setIsGeneratingSchematic(true);
       setError(null);
@@ -28,7 +35,10 @@ export function ImageGenerator() {
       const res = await fetch("/api/schematic", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ imageUrl })
+        body: JSON.stringify({ 
+          imageUrl,
+          viewType
+        })
       });
 
       if (!res.ok) {
@@ -56,6 +66,7 @@ export function ImageGenerator() {
       setError(null);
       setGeneratedImage(null);
       setSchematicImage(null);
+      setSelectedViewType(null);
 
       // Generate original image
       const response = await fetch('/api/generate', {
@@ -79,17 +90,18 @@ export function ImageGenerator() {
       }
 
       setGeneratedImage(data.imageUrl);
-
-      // Add a 2-second delay before generating the schematic
-      await new Promise(resolve => setTimeout(resolve, 2000));
-      
-      await generateSchematic(data.imageUrl);
     } catch (err) {
       console.error('Generation error:', err);
       setError(err instanceof Error ? err.message : 'An unexpected error occurred');
     } finally {
       setIsGenerating(false);
     }
+  };
+
+  const handleViewTypeClick = async (viewType: string) => {
+    if (!generatedImage) return;
+    setSelectedViewType(viewType);
+    await generateSchematic(generatedImage, viewType);
   };
 
   const handleKeywordClick = (keyword: string) => {
@@ -161,27 +173,40 @@ export function ImageGenerator() {
             )}
           </div>
 
+          {generatedImage && !schematicImage && !isGeneratingSchematic && (
+            <div className="flex gap-2 justify-center">
+              {Object.entries(viewTypes).map(([type, prompt]) => (
+                <Button
+                  key={type}
+                  variant="outline"
+                  onClick={() => handleViewTypeClick(type)}
+                  className="capitalize"
+                >
+                  {type}
+                </Button>
+              ))}
+            </div>
+          )}
+
           <div className="aspect-[4/3] rounded-lg border bg-card overflow-hidden relative">
             {schematicImage ? (
               <>
-                <div className="absolute inset-0 flex items-center justify-center bg-muted/50">
-                  <Image
-                    src={schematicImage}
-                    alt="Generated schematic"
-                    fill
-                    className="object-contain"
-                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                  />
-                </div>
+                <Image
+                  src={schematicImage}
+                  alt="Generated schematic"
+                  fill
+                  className="object-contain"
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                />
                 <div className="absolute top-2 left-2 bg-background/80 px-2 py-1 rounded text-xs font-medium">
-                  Schematic View
+                  {selectedViewType ? selectedViewType.charAt(0).toUpperCase() + selectedViewType.slice(1) : 'Schematic'} View
                 </div>
               </>
             ) : isGeneratingSchematic ? (
               <div className="absolute inset-0 flex items-center justify-center">
                 <div className="text-center p-8">
                   <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto mb-4"></div>
-                  <h3 className="text-xl font-medium mb-2">Generating Schematic</h3>
+                  <h3 className="text-xl font-medium mb-2">Generating {selectedViewType ? selectedViewType.charAt(0).toUpperCase() + selectedViewType.slice(1) : 'Schematic'}</h3>
                   <p className="text-sm text-muted-foreground">
                     Creating a technical drawing of your design...
                   </p>
@@ -191,9 +216,9 @@ export function ImageGenerator() {
               <div className="absolute inset-0 flex items-center justify-center">
                 <div className="text-center p-8">
                   <ImageIcon className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
-                  <h3 className="text-xl font-medium mb-2">Schematic Will Appear Here</h3>
+                  <h3 className="text-xl font-medium mb-2">Select a View Type</h3>
                   <p className="text-sm text-muted-foreground">
-                    The schematic will be generated after the main image
+                    Choose between floor plan, schematic, or 3D view
                   </p>
                 </div>
               </div>
