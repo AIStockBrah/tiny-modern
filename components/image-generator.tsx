@@ -9,6 +9,7 @@ import Image from "next/image";
 export function ImageGenerator() {
   const [prompt, setPrompt] = useState('');
   const [isGenerating, setIsGenerating] = useState(false);
+  const [isGeneratingSchematic, setIsGeneratingSchematic] = useState(false);
   const [generatedImage, setGeneratedImage] = useState<string | null>(null);
   const [schematicImage, setSchematicImage] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -21,18 +22,21 @@ export function ImageGenerator() {
 
   const generateSchematic = async (imageUrl: string) => {
     try {
+      setIsGeneratingSchematic(true);
+      setError(null);
+
       const res = await fetch("/api/schematic", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ imageUrl })
       });
 
+      const data = await res.json();
+
       if (!res.ok) {
-        const errorData = await res.json();
-        throw new Error(errorData.error || 'Failed to generate schematic');
+        throw new Error(data.error || 'Failed to generate schematic');
       }
 
-      const data = await res.json();
       if (!data.schematicUrl) {
         throw new Error('No schematic URL received from the server');
       }
@@ -41,6 +45,8 @@ export function ImageGenerator() {
     } catch (err) {
       console.error('Schematic generation error:', err);
       setError(err instanceof Error ? err.message : 'Failed to generate schematic');
+    } finally {
+      setIsGeneratingSchematic(false);
     }
   };
 
@@ -167,6 +173,16 @@ export function ImageGenerator() {
                   Schematic View
                 </div>
               </>
+            ) : isGeneratingSchematic ? (
+              <div className="absolute inset-0 flex items-center justify-center">
+                <div className="text-center p-8">
+                  <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto mb-4"></div>
+                  <h3 className="text-xl font-medium mb-2">Generating Schematic</h3>
+                  <p className="text-sm text-muted-foreground">
+                    Creating a technical drawing of your design...
+                  </p>
+                </div>
+              </div>
             ) : (
               <div className="absolute inset-0 flex items-center justify-center">
                 <div className="text-center p-8">
