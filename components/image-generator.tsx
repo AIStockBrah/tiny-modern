@@ -20,14 +20,28 @@ export function ImageGenerator() {
   ];
 
   const generateSchematic = async (imageUrl: string) => {
-    const res = await fetch("/api/schematic", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ imageUrl })
-    });
+    try {
+      const res = await fetch("/api/schematic", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ imageUrl })
+      });
 
-    const data = await res.json();
-    setSchematicImage(data.schematicUrl);
+      if (!res.ok) {
+        const errorData = await res.json();
+        throw new Error(errorData.error || 'Failed to generate schematic');
+      }
+
+      const data = await res.json();
+      if (!data.schematicUrl) {
+        throw new Error('No schematic URL received from the server');
+      }
+
+      setSchematicImage(data.schematicUrl);
+    } catch (err) {
+      console.error('Schematic generation error:', err);
+      setError(err instanceof Error ? err.message : 'Failed to generate schematic');
+    }
   };
 
   const handleGenerate = async () => {
