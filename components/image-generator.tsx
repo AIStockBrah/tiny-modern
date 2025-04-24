@@ -10,6 +10,7 @@ export function ImageGenerator() {
   const [prompt, setPrompt] = useState('');
   const [isGenerating, setIsGenerating] = useState(false);
   const [generatedImage, setGeneratedImage] = useState<string | null>(null);
+  const [schematicImage, setSchematicImage] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   const trainedKeywords = [
@@ -18,12 +19,25 @@ export function ImageGenerator() {
     'cliff', 'forest', 'beach'
   ];
 
+  const generateSchematic = async (imageUrl: string) => {
+    const res = await fetch("/api/schematic", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ imageUrl })
+    });
+
+    const data = await res.json();
+    setSchematicImage(data.schematicUrl);
+  };
+
   const handleGenerate = async () => {
     try {
       setIsGenerating(true);
       setError(null);
       setGeneratedImage(null);
+      setSchematicImage(null);
 
+      // Generate original image
       const response = await fetch('/api/generate', {
         method: 'POST',
         headers: {
@@ -45,6 +59,7 @@ export function ImageGenerator() {
       }
 
       setGeneratedImage(data.imageUrl);
+      await generateSchematic(data.imageUrl);
     } catch (err) {
       console.error('Generation error:', err);
       setError(err instanceof Error ? err.message : 'An unexpected error occurred');
@@ -99,26 +114,57 @@ export function ImageGenerator() {
       </div>
 
       <div className="md:col-span-3 space-y-6">
-        <div className="aspect-[4/3] rounded-lg border bg-card overflow-hidden relative">
-          {generatedImage ? (
-            <Image
-              src={generatedImage}
-              alt="Generated architecture"
-              fill
-              className="object-cover"
-              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-            />
-          ) : (
-            <div className="absolute inset-0 flex items-center justify-center">
-              <div className="text-center p-8">
-                <ImageIcon className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
-                <h3 className="text-xl font-medium mb-2">Your Vision Will Appear Here</h3>
-                <p className="text-sm text-muted-foreground">
-                  Describe your architectural concept and click generate
-                </p>
+        <div className="grid grid-cols-1 gap-6">
+          <div className="aspect-[4/3] rounded-lg border bg-card overflow-hidden relative">
+            {generatedImage ? (
+              <Image
+                src={generatedImage}
+                alt="Generated architecture"
+                fill
+                className="object-cover"
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+              />
+            ) : (
+              <div className="absolute inset-0 flex items-center justify-center">
+                <div className="text-center p-8">
+                  <ImageIcon className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
+                  <h3 className="text-xl font-medium mb-2">Your Vision Will Appear Here</h3>
+                  <p className="text-sm text-muted-foreground">
+                    Describe your architectural concept and click generate
+                  </p>
+                </div>
               </div>
-            </div>
-          )}
+            )}
+          </div>
+
+          <div className="aspect-[4/3] rounded-lg border bg-card overflow-hidden relative">
+            {schematicImage ? (
+              <>
+                <div className="absolute inset-0 flex items-center justify-center bg-muted/50">
+                  <Image
+                    src={schematicImage}
+                    alt="Generated schematic"
+                    fill
+                    className="object-contain"
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                  />
+                </div>
+                <div className="absolute top-2 left-2 bg-background/80 px-2 py-1 rounded text-xs font-medium">
+                  Schematic View
+                </div>
+              </>
+            ) : (
+              <div className="absolute inset-0 flex items-center justify-center">
+                <div className="text-center p-8">
+                  <ImageIcon className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
+                  <h3 className="text-xl font-medium mb-2">Schematic Will Appear Here</h3>
+                  <p className="text-sm text-muted-foreground">
+                    The schematic will be generated after the main image
+                  </p>
+                </div>
+              </div>
+            )}
+          </div>
         </div>
 
         {error && (
