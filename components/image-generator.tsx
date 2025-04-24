@@ -79,6 +79,10 @@ export function ImageGenerator() {
       }
 
       setGeneratedImage(data.imageUrl);
+
+      // Add a 2-second delay before generating the schematic
+      await new Promise(resolve => setTimeout(resolve, 2000));
+      
       await generateSchematic(data.imageUrl);
     } catch (err) {
       console.error('Generation error:', err);
