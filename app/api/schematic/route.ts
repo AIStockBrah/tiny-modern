@@ -11,9 +11,9 @@ export async function POST(req: Request) {
     }
 
     const viewTypePrompts = {
-      floorplan: "Create a top-down architectural floor plan layout of this modern tiny house in black and white, showing walls, rooms, and entry.",
-      schematic: "Generate a black-and-white architectural drawing showcases four orthographic views: a floor plan, front elevation, side elevation, and section, all laid out in a two-by-two grid with clear labels and dimensions.",
-      render3d: "Render a 3D isometric cutaway floor plan view of this tiny house, with visible furniture and walls, in a clean architectural style."
+      floorplan: "Create a simple top-down architectural floor plan layout of this modern tiny house in black and white, showing walls, rooms, and entry in a clean minimalist architectural style.",
+      schematic: "Generate a black-and-white architectural drawing of this modern tiny house showcasing four orthographic views: a floor plan, front elevation, side elevation, and section. Layout all four views in a clean technical drawing grid with dimensions and simple black linework, style like a modern architectural blueprint.",
+      render3d: "Render a simple 3D isometric cutaway floor plan view of this tiny house, with visible furniture and walls, in a clean minimalist architectural style."
     };
 
     // STEP 1: Use GPT-4o to generate schematic prompt
