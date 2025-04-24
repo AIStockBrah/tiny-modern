@@ -11,9 +11,9 @@ export async function POST(req: Request) {
     }
 
     const viewTypePrompts = {
-      floorplan: "Create a simple top-down architectural floor plan layout of this modern tiny house in black and white, showing walls, rooms, and entry in a clean minimalist architectural style.",
-      schematic: "Generate a black-and-white architectural drawing of this modern tiny house showcasing four orthographic views: a floor plan, front elevation, side elevation, and section. Layout all four views in a clean technical drawing grid with dimensions and simple black linework, style like a modern architectural blueprint.",
-      render3d: "Render a simple 3D isometric cutaway floor plan view of this tiny house, with visible furniture and walls, in a clean minimalist architectural style."
+      floorplan: "Create a top-down architectural floor plan layout that matches the style and proportions of this modern tiny house. Maintain the same architectural language, materials, and design elements seen in the original image. Show walls, rooms, and entry in a clean minimalist style with the same proportions and spatial relationships as the original design.",
+      schematic: "Generate a black-and-white architectural drawing that captures the exact proportions, materials, and design elements of this modern tiny house. Create four orthographic views (floor plan, front elevation, side elevation, and section) that precisely match the original design's dimensions and architectural features. Use a clean technical drawing grid with accurate dimensions and linework that reflects the original building's style.",
+      render3d: "Render a 3D isometric cutaway view that maintains the exact proportions, materials, and architectural features of this tiny house. Show the interior layout with furniture and walls while preserving the original design's spatial relationships and aesthetic qualities. Match the original image's style, materials, and architectural language in the 3D representation."
     };
 
     // STEP 1: Use GPT-4o to generate schematic prompt
@@ -26,7 +26,7 @@ export async function POST(req: Request) {
       body: JSON.stringify({
         model: "gpt-4o",
         messages: [
-          { role: "system", content: "You are an architectural assistant that creates schematic prompts for AI rendering." },
+          { role: "system", content: "You are an architectural assistant that creates schematic prompts for AI rendering. Your task is to analyze the original image and create prompts that will generate views that match its exact style, proportions, and design elements." },
           {
             role: "user",
             content: [
