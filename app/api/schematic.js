@@ -1,9 +1,5 @@
 import { NextResponse } from "next/server";
 
-export const config = {
-  runtime: "edge",
-};
-
 export default async function handler(req) {
   try {
     if (req.method !== "POST") {
