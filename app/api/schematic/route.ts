@@ -12,7 +12,7 @@ export async function POST(req: Request) {
 
     const viewTypePrompts = {
       floorplan: "Create a top-down architectural floor plan layout of this modern tiny house in black and white, showing walls, rooms, and entry.",
-      schematic: "Generate a black-and-white architectural schematic elevation showing the front and side view of this modern tiny house, as a technical drawing.",
+      schematic: "Generate a black-and-white architectural drawing showcases four orthographic views: a floor plan, front elevation, side elevation, and section, all laid out in a two-by-two grid with clear labels and dimensions.",
       render3d: "Render a 3D isometric cutaway floor plan view of this tiny house, with visible furniture and walls, in a clean architectural style."
     };
 
