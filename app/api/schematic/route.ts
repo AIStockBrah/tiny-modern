@@ -23,7 +23,7 @@ export async function POST(req: Request) {
           {
             role: "user",
             content: [
-              { type: "text", text: "Create a prompt for a black-and-white architectural schematic elevation of this modern tiny house." },
+              { type: "text", text: "Create a prompt for a black-and-white architectural schematic floor plan layout of this modern tiny house." },
               { type: "image_url", image_url: { url: imageUrl } }
             ]
           }
