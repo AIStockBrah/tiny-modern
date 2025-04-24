@@ -7,46 +7,32 @@ export const config = {
 export default async function handler(req) {
   try {
     if (req.method !== "POST") {
-      return NextResponse.json({ error: "Only POST requests allowed" }, { status: 405 });
+      return new NextResponse(
+        JSON.stringify({ error: "Only POST requests allowed" }),
+        { status: 405, headers: { "Content-Type": "application/json" } }
+      );
     }
 
-    const { imageUrl } = await req.json();
+    let body;
+    try {
+      body = await req.json();
+    } catch (e) {
+      return new NextResponse(
+        JSON.stringify({ error: "Invalid JSON in request body" }),
+        { status: 400, headers: { "Content-Type": "application/json" } }
+      );
+    }
+
+    const { imageUrl } = body;
+
     if (!imageUrl) {
-      return NextResponse.json({ error: "imageUrl is required" }, { status: 400 });
+      return new NextResponse(
+        JSON.stringify({ error: "imageUrl is required" }),
+        { status: 400, headers: { "Content-Type": "application/json" } }
+      );
     }
 
-    // STEP 1: Use GPT-4o to turn the image into a prompt
-    const gptResponse = await fetch("https://api.openai.com/v1/chat/completions", {
-      method: "POST",
-      headers: {
-        "Authorization": `Bearer ${process.env.OPENAI_API_KEY}`,
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        model: "gpt-4o",
-        messages: [
-          { role: "system", content: "You are an architecture assistant." },
-          {
-            role: "user",
-            content: [
-              { type: "text", text: "Create a prompt for a black-and-white architectural schematic elevation of this tiny house." },
-              { type: "image_url", image_url: { url: imageUrl } }
-            ]
-          }
-        ],
-        max_tokens: 1000
-      })
-    });
-
-    if (!gptResponse.ok) {
-      const gptError = await gptResponse.text();
-      return NextResponse.json({ error: "GPT-4o failed", details: gptError }, { status: 500 });
-    }
-
-    const gptData = await gptResponse.json();
-    const schematicPrompt = gptData.choices[0].message.content;
-
-    // STEP 2: Feed that prompt to DALL·E
+    // Generate the schematic using DALL-E
     const dalleResponse = await fetch("https://api.openai.com/v1/images/generations", {
       method: "POST",
       headers: {
@@ -55,22 +41,43 @@ export default async function handler(req) {
       },
       body: JSON.stringify({
         model: "dall-e-3",
-        prompt: schematicPrompt,
+        prompt: `Create a black-and-white architectural schematic elevation of this tiny house. Focus on clean lines, technical details, and proper architectural drafting conventions.`,
         size: "1024x1024",
         n: 1
       })
     });
 
     if (!dalleResponse.ok) {
-      const dalleError = await dalleResponse.text();
-      return NextResponse.json({ error: "DALL·E error", details: dalleError }, { status: 500 });
+      const errorData = await dalleResponse.json();
+      return new NextResponse(
+        JSON.stringify({ 
+          error: "DALL-E API error", 
+          details: errorData 
+        }),
+        { status: dalleResponse.status, headers: { "Content-Type": "application/json" } }
+      );
     }
 
     const dalleData = await dalleResponse.json();
-    return NextResponse.json({ schematicUrl: dalleData.data[0].url });
+    if (!dalleData.data?.[0]?.url) {
+      return new NextResponse(
+        JSON.stringify({ error: "Invalid DALL-E response format" }),
+        { status: 500, headers: { "Content-Type": "application/json" } }
+      );
+    }
 
-  } catch (err) {
-    console.error("Server error:", err);
-    return NextResponse.json({ error: "Internal server error", details: err.message }, { status: 500 });
+    return new NextResponse(
+      JSON.stringify({ schematicUrl: dalleData.data[0].url }),
+      { status: 200, headers: { "Content-Type": "application/json" } }
+    );
+  } catch (error) {
+    console.error("Schematic generation error:", error);
+    return new NextResponse(
+      JSON.stringify({ 
+        error: "Internal server error", 
+        details: error.message 
+      }),
+      { status: 500, headers: { "Content-Type": "application/json" } }
+    );
   }
 }

@@ -31,12 +31,12 @@ export function ImageGenerator() {
         body: JSON.stringify({ imageUrl })
       });
 
-      const data = await res.json();
-
       if (!res.ok) {
-        throw new Error(data.error || 'Failed to generate schematic');
+        const errorData = await res.json();
+        throw new Error(errorData.error || 'Failed to generate schematic');
       }
 
+      const data = await res.json();
       if (!data.schematicUrl) {
         throw new Error('No schematic URL received from the server');
       }
